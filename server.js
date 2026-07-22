@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const pool = require("./src/models/db");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,11 +16,22 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("/health", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "MediBook API is running",
-  });
+app.get("/health", async (req, res) => {
+  try {
+    await pool.query("SELECT 1");
+
+    res.status(200).json({
+      success: true,
+      message: "MediBook API and database are running",
+    });
+  } catch (error) {
+    console.error("Database health check failed:", error.message);
+
+    res.status(500).json({
+      success: false,
+      message: "Database connection failed",
+    });
+  }
 });
 
 app.listen(PORT, () => {
