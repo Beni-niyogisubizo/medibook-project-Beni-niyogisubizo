@@ -4,6 +4,7 @@ const express = require("express");
 const pool = require("./src/models/db");
 const patientRoutes = require("./src/routes/patientRoutes");
 const doctorRoutes = require("./src/routes/doctorRoutes");
+const appointmentRoutes = require("./src/routes/appointmentRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/patients", patientRoutes);
 app.use("/api/doctors", doctorRoutes);
+app.use("/api/appointments", appointmentRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({
